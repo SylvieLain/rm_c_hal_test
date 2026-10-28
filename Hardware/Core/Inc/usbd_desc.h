@@ -7,17 +7,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-/* USER CODE END Header */  
+/* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __USBD_DESC__C__
 #define __USBD_DESC__C__
@@ -41,11 +40,11 @@
   * @brief Usb device descriptors module.
   * @{
   */
-  
-/** @defgroup USBD_DESC_Exported_Constants USBD_DESC_Exported_Constants
-  * @brief Constants.
-  * @{
-  */
+
+/*
+ * User to provide a unique ID to define the USB device serial number
+ * The use of UID_BASE register can be considered as an example
+ */
 #define         DEVICE_ID1          (UID_BASE)
 #define         DEVICE_ID2          (UID_BASE + 0x4)
 #define         DEVICE_ID3          (UID_BASE + 0x8)
@@ -141,5 +140,3 @@ extern USBD_DescriptorsTypeDef FS_Desc;
 #endif
 
 #endif /* __USBD_DESC__C__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

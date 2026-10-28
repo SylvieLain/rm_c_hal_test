@@ -1,11 +1,24 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    main.h
-  * @brief   RoboMaster C 型开发板 (STM32F407IGHx) 板级引脚定义
+  * @file           : main.h
+  * @brief          : Header for main.c file.
+  *                   This file contains the common defines of the application.
   ******************************************************************************
-  * 引脚来源: 20.standard_robot/standard_robot.ioc (权威配置)
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
 
@@ -13,55 +26,75 @@
 extern "C" {
 #endif
 
+/* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
+
+/* USER CODE END ET */
+
+/* Exported constants --------------------------------------------------------*/
+/* USER CODE BEGIN EC */
+
+/* USER CODE END EC */
+
+/* Exported macro ------------------------------------------------------------*/
+/* USER CODE BEGIN EM */
+
+/* USER CODE END EM */
+
+/* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
-/* ---------------- LED (TIM5 CH1/2/3, 低电平点亮) ---------------- */
-#define LED_R_Pin            GPIO_PIN_12
-#define LED_R_GPIO_Port      GPIOH
-#define LED_G_Pin            GPIO_PIN_11
-#define LED_G_GPIO_Port      GPIOH
-#define LED_B_Pin            GPIO_PIN_10
-#define LED_B_GPIO_Port      GPIOH
+/* USER CODE BEGIN EFP */
 
-/* ---------------- 蜂鸣器 (TIM4_CH3) ---------------- */
-#define BUZZER_Pin           GPIO_PIN_14
-#define BUZZER_GPIO_Port     GPIOD
+/* USER CODE END EFP */
 
-/* ---------------- 按键 / 拨码 ---------------- */
-#define KEY_Pin              GPIO_PIN_0
-#define KEY_GPIO_Port        GPIOA
-
-#define HW0_Pin              GPIO_PIN_0
-#define HW0_GPIO_Port        GPIOC
-#define HW1_Pin              GPIO_PIN_1
-#define HW1_GPIO_Port        GPIOC
-#define HW2_Pin              GPIO_PIN_2
-#define HW2_GPIO_Port        GPIOC
-
-#define BUTTON_TRIG_Pin      GPIO_PIN_7
+/* Private defines -----------------------------------------------------------*/
+#define BUTTON_TRIG_Pin GPIO_PIN_7
 #define BUTTON_TRIG_GPIO_Port GPIOI
-
-/* ---------------- BMI088 SPI 片选 / IST8310 ---------------- */
-#define CS1_ACCEL_Pin        GPIO_PIN_4
-#define CS1_ACCEL_GPIO_Port  GPIOA
-#define CS1_GYRO_Pin         GPIO_PIN_0
-#define CS1_GYRO_GPIO_Port   GPIOB
-#define SPI2_CS_Pin          GPIO_PIN_12
-#define SPI2_CS_GPIO_Port    GPIOB
-#define RSTN_IST8310_Pin     GPIO_PIN_6
+#define RSTN_IST8310_Pin GPIO_PIN_6
 #define RSTN_IST8310_GPIO_Port GPIOG
+#define LED_R_Pin GPIO_PIN_12
+#define LED_R_GPIO_Port GPIOH
+#define DRDY_IST8310_Pin GPIO_PIN_3
+#define DRDY_IST8310_GPIO_Port GPIOG
+#define ADC_BAT_Pin GPIO_PIN_10
+#define ADC_BAT_GPIO_Port GPIOF
+#define LED_G_Pin GPIO_PIN_11
+#define LED_G_GPIO_Port GPIOH
+#define LED_B_Pin GPIO_PIN_10
+#define LED_B_GPIO_Port GPIOH
+#define HW0_Pin GPIO_PIN_0
+#define HW0_GPIO_Port GPIOC
+#define HW1_Pin GPIO_PIN_1
+#define HW1_GPIO_Port GPIOC
+#define HW2_Pin GPIO_PIN_2
+#define HW2_GPIO_Port GPIOC
+#define BUZZER_Pin GPIO_PIN_14
+#define BUZZER_GPIO_Port GPIOD
+#define KEY_Pin GPIO_PIN_0
+#define KEY_GPIO_Port GPIOA
+#define CS1_ACCEL_Pin GPIO_PIN_4
+#define CS1_ACCEL_GPIO_Port GPIOA
+#define INT1_ACCEL_Pin GPIO_PIN_4
+#define INT1_ACCEL_GPIO_Port GPIOC
+#define INT1_GYRO_Pin GPIO_PIN_5
+#define INT1_GYRO_GPIO_Port GPIOC
+#define SPI2_CS_Pin GPIO_PIN_12
+#define SPI2_CS_GPIO_Port GPIOB
+#define CS1_GYRO_Pin GPIO_PIN_0
+#define CS1_GYRO_GPIO_Port GPIOB
 
-/* ---------------- 电池电压 (ADC3_IN8) ---------------- */
-#define ADC_BAT_Pin          GPIO_PIN_10
-#define ADC_BAT_GPIO_Port    GPIOF
+/* USER CODE BEGIN Private defines */
 
-/* ---------------- 串口 ---------------- */
-/* USART1: TX PA9  / RX PB7  (AF7)  —— 原工程 printf 口 */
-/* USART2: TX PD5  / RX PD6  (AF7)  —— C 板“串口2”，接 CH340 */
-/* USART3: TX PC10 / RX PC11 (AF7)  —— 原工程 DBUS, 100000 8E1 */
-/* USART6: TX PG14 / RX PG9  (AF8)  —— C 板“串口4” */
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

@@ -11,6 +11,7 @@
         "EIDE.SourceTree.AutoSearchObjFile": true,
         "terminal.integrated.shellIntegration.enabled": false,
         "C_Cpp.default.configurationProvider": "cl.eide",
+        "C_Cpp.intelliSenseEngine": "default",
         "C_Cpp.errorSquiggles": "disabled",
         "files.associations": {
             ".eideignore": "ignore",
@@ -29,7 +30,7 @@
             "editor.tabSize": 4,
             "editor.autoIndent": "advanced"
         },
-        "clangd.arguments": [
+        "stm32cube-ide-clangd.arguments": [
             "--header-insertion=never"
         ]
     },

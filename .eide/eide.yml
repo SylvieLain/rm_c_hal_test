@@ -1,12 +1,12 @@
 version: "4.1"
 name: peripheral_test
 type: ARM
-deviceName: null
+deviceName: STM32F407IGHx
 packDir: null
 srcDirs:
   - Hardware
   - BSP
-  - App
+  - APP
   - Algorithm
 virtualFolder:
   name: <virtual_root>
@@ -25,6 +25,8 @@ targets:
         - HSE_VALUE=12000000
       incList:
         - Hardware/Core/Inc
+        - Hardware/USB_DEVICE/App
+        - Hardware/USB_DEVICE/Target
         - Hardware/Drivers/STM32F4xx_HAL_Driver/Inc
         - Hardware/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
         - Hardware/Drivers/CMSIS/Device/ST/STM32F4xx/Include
@@ -32,9 +34,15 @@ targets:
         - Hardware/Middlewares/ST/STM32_USB_Device_Library/Core/Inc
         - Hardware/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
         - BSP
-        - App
+        - APP/main
+        - APP/public
+        - BSP/BMI088
+        - BSP/UART
+        - Algorithm/PID
       libList: []
-    excludeList: []
+    excludeList:
+      - Hardware/Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates
+      - Hardware/MDK-ARM
     settings:
       debugger: cortex-debug
     toolchain: GCC
@@ -60,8 +68,10 @@ targets:
             warnings: all-warnings
           global:
             $float-abi-type: hard
-            misc-control: --specs=nosys.specs --specs=nano.specs
+            misc-control: ""
+            not-use-syscalls: true
             output-debug-info: enable
+            use-newlib-nano: true
           linker:
             $outputTaskExcludes: []
             LIB_FLAGS: -lm
