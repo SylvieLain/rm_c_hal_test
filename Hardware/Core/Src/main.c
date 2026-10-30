@@ -198,6 +198,8 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+    HAL_Delay(50);
+    
   }
   /* USER CODE END Error_Handler_Debug */
 }
