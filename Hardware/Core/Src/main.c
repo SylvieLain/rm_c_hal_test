@@ -34,6 +34,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "app_main.h"
+#include "board.h"
 
 /* USER CODE END Includes */
 
@@ -195,10 +196,12 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
+  // __disable_irq();
   while (1)
   {
-    HAL_Delay(50);
+    set_board_led(red_led);
+    board_beep(2000,20);
+    HAL_Delay(40);
     
   }
   /* USER CODE END Error_Handler_Debug */

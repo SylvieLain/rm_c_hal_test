@@ -5,7 +5,7 @@
 /* 硬件映射 (RoboMaster C 板)：
    KEY    PA0        输入上拉，低电平按下
    LED_B  PH10 TIM5_CH1  LED_G PH11 TIM5_CH2  LED_R PH12 TIM5_CH3
-   RGB 灯为共阳极，低电平点亮
+   RGB 灯高电平点亮
    BUZZER PD14 TIM4_CH3  无源蜂鸣器，PWM 驱动 */
 
 #define LED_TIM_HANDLE     htim5
@@ -41,11 +41,11 @@ bool board_key_read(void)
     return pressed;
 }
 
-/* 设置单通道亮度 0-255，共阳极低电平点亮，占空比取反 */
+/* 设置单通道亮度 0-255，PWM1 高电平点亮 */
 static void led_set_brightness(uint32_t channel, uint8_t level)
 {
-    uint32_t duty = (uint32_t)level * 65535U / 255U;
-    __HAL_TIM_SET_COMPARE(&LED_TIM_HANDLE, channel, 65535U - duty);
+    uint32_t period = __HAL_TIM_GET_AUTORELOAD(&LED_TIM_HANDLE) + 1U;
+    __HAL_TIM_SET_COMPARE(&LED_TIM_HANDLE, channel, (uint32_t)level * period / 255U);
 }
 
 bool set_board_led(Board_Led_Color color)
@@ -111,11 +111,11 @@ void HAL_SYSTICK_Callback(void)
 
 void board_init(void)
 {
+    board_buzzer_stop();
+    set_board_led(led_off);
+
     HAL_TIM_PWM_Start(&LED_TIM_HANDLE, LED_TIM_CH_R);
     HAL_TIM_PWM_Start(&LED_TIM_HANDLE, LED_TIM_CH_G);
     HAL_TIM_PWM_Start(&LED_TIM_HANDLE, LED_TIM_CH_B);
     HAL_TIM_PWM_Start(&BUZZER_TIM_HANDLE, BUZZER_TIM_CH);
-
-    board_buzzer_stop();
-    set_board_led(led_off);
 }

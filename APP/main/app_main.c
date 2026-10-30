@@ -5,12 +5,14 @@
 
 void user_main(void)
 {
+  board_init();
+  // Error_Handler();
   if (qd4310_can1_init() != HAL_OK)
   {
     Error_Handler();
   }
 
-  board_init();
+  
 
   while (1)
   {
