@@ -198,12 +198,12 @@ void Error_Handler(void)
   /* User can add his own implementation to report the HAL error return state */
   // __disable_irq();
   while (1)
-  {
+{
     set_board_led(red_led);
-    board_beep(2000,20);
-    HAL_Delay(40);
-    
-  }
+    HAL_Delay(500);
+    set_board_led(led_off);
+    HAL_Delay(500);
+}
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
