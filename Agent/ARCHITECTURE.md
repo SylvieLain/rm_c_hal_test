@@ -27,6 +27,8 @@
 
 # 外设状态
 
+板子为大疆rm c板
+
 # BMI088（SPI1）
 | 信号 | 引脚 |
 |---|---|
@@ -36,9 +38,58 @@
 | CS_ACCEL | PA4 |
 | CS_GYRO | PB0 |
 
-Mode 3、8 bit、NSS 软件、`84 MHz / 256 = 328 kHz`（与原工程一致）。
-自检项：ACC 芯片 ID `0x1E`、GYRO 芯片 ID `0x0F`、`BMI088_init()` 自检返回值、5 Hz 加速度/角速度/温度。
+Mode 3、8 bit、NSS 软件、`84 MHz / 256 = 328 kHz`
 打印用整数（mg / 0.01 dps / 0.1 ℃），不依赖浮点 printf。
+
+# QD4310（CAN1）
+依据 C 板用户手册的 CAN 接口线序、QD4310 使用手册的 CAN 协议，并与当前 `Hardware/cubemx.ioc` 位时序核对。
+
+| 项目 | 配置 |
+|---|---|
+| C 板接口 | CAN1，2-pin；Pin 1 = CANL，Pin 2 = CANH |
+| STM32 引脚 | CAN1_RX = PD0 (AF9)，CAN1_TX = PD1 (AF9) |
+| 波特率 | 1 Mbps；APB1 = 42 MHz，Prescaler = 3，BS1 = 10 TQ，BS2 = 3 TQ，SJW = 1 TQ |
+| 帧格式 | 11-bit 标准数据帧，不使用扩展帧 |
+| QD4310 供电 | 7~26 V |
+| 电机 CAN ID | 工程配置为 `0x00`；有效范围 `0x00`~`0x0F`，同一总线上必须唯一 |
+| 控制帧 | 标准 ID `0x400 + ID`；ID 0 时为 `0x400`，DLC = 3 |
+| 反馈帧 | 标准 ID `0x500 + ID`；ID 0 时为 `0x500`，DLC = 8 |
+| 控制数据 | Byte 0 为指令；Byte 1~2 为控制量，低字节在前 |
+| 反馈数据 | Byte 0 状态、Byte 1 错误码、Byte 2~3 电流、Byte 4~5 转速、Byte 6~7 角度；多字节值低字节在前 |
+
+控制指令：`0x00` 请求反馈、`0x01` 使能、`0x02` 失能、`0x03` 电流、`0x04` 速度、`0x05` 角度、`0x06` 低速、`0x07` 角度步进、`0xFF` 重启、`0xFE` 设置零点、`0xFB` 清除错误。
+
+# LED 与按键
+依据 C 板用户手册；当前引脚功能以 `Hardware/cubemx.ioc` 为准。
+
+| 外设 | 引脚/配置 | 说明 |
+|---|---|---|
+| 蓝色 LED | PH10，TIM5_CH1 | 用户 RGB LED；手册说明 IO 高电平点亮 |
+| 绿色 LED | PH11，TIM5_CH2 | 用户 RGB LED；手册说明 IO 高电平点亮 |
+| 红色 LED | PH12，TIM5_CH3 | 用户 RGB LED；手册说明 IO 高电平点亮 |
+| 用户按键 KEY | PA0，GPIO 输入，上拉 | 按下时为低电平 |
+
+# UART
+C 板外壳丝印与 STM32 外设编号不一致，按手册和当前工程映射如下：
+
+| 外壳丝印/接口 | STM32 外设 | 引脚 | 接口线序 | 当前波特率 |
+|---|---|---|---|---|
+| UART1（3-pin） | USART6 | TX = PG14，RX = PG9 | GND、TX、RX | 115200 bps |
+| UART2（4-pin） | USART1 | TX = PA9，RX = PB7 | RXD、TXD、GND、5V | 115200 bps |
+
+串口为 3.3 V / 5 V 电平；连接另一设备时 TX、RX 交叉连接。RS-232/RS-485 需外接电平转换器。
+
+# PWM
+依据 C 板用户手册，板载 7 路 PWM 舵机接口总输出电流上限为 5 A；接口通道为 TIM1_CH1~CH4、TIM8_CH1~CH3。
+
+| 功能 | 当前工程映射 |
+|---|---|
+| TIM1_CH1~CH4 | PE9、PE11、PE13、PE14 |
+| TIM8_CH1~CH2 | PC6、PI6 |
+| TIM8_CH3 | 当前 `.ioc` 中未配置为 PWM；PI7 配置为 GPIO 输入 |
+| 5V 接口控制 | TIM3_CH3，PC8 |
+| 蜂鸣器 | TIM4_CH3，PD14 |
+| RGB LED 亮度 | TIM5_CH1~CH3，PH10~PH12 |
 
 # 时钟
 HSE 12 MHz → PLLM=6 / PLLN=168 / PLLP=2 / PLLQ=7 → SYSCLK 168 MHz

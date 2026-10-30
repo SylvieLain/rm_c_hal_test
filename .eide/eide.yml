@@ -38,6 +38,10 @@ targets:
         - APP/public
         - BSP/BMI088
         - BSP/UART
+        - BSP/CAN
+        - BSP/Board
+        - BSP/qd4310/can
+        - APP/qd4310
         - Algorithm/PID
       libList: []
     excludeList:

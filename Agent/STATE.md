@@ -6,12 +6,10 @@
         ## 缺点:抗干扰较差)
 /*!!不要修改该内部内容!!*/
 
-## 当前任务：QD4310 UART 实机测试通过，外壳 UART1 对应 USART6
-## 配置：保留 F4 FW 1.28.3 和 EIDE yml；原有 28 个非 RTOS IP、69 个引脚项及全部 DMA 映射已恢复，并与原始 .ioc 核对。
-## 分层：BSP/USB/bsp_usb.c 提供 bsp_usb_read/write；生成的 CDC 文件仅转发类回调与底层发送。APP 主循环为空，移除 UART 打印重定向和故障亮灯业务。
-## 接收：沿用 ring_t，容量 2048 字节；满时推进读索引、累计丢弃字节数，接收后立即重新挂接端点。主循环读取期间保护队列索引。
-## QD4310：来自下载压缩包内 QDrive V1.2.0 STM32 C 例程。BSP/qd4310/uart、can 分别使用 QD4310_UART_、QD4310_CAN_ 前缀，EIDE 已加入路径。保留命令和反馈换算，修正 UART 缓冲变量/C 语法、失败反馈解析、无限等待及角度 16 位转换。UART 同步收发，CAN 只提交邮箱，控制函数返回 HAL 状态。未接入 APP 或自动启动电机。
-## 中断：保留异常空壳、HAL SysTick 和 USB 转发；其余外设及 DMA NVIC 暂不启用，无 RTOS。
-## 实机：外壳 UART1 实际为 USART6（PG14 TX / PG9 RX）；修正软件端口、用户重新排线后通信正常。USART6、115200、ID 0；原驱动 5 ms 接收超时下，查询及 +10/-10 rpm 各 2 秒、停车失能共 136 次交互全部成功，无超时、CRC/ID 错误或电机反馈错误码。正反转末 10 次反馈均速分别 +9.964/-9.726 rpm，末次转速 0、使能位 0。当前临时固件待命，重启不自动运行。
-## 临时文件：D:/codex/2026-10-28/ba/work/qd4310-hw，测试替换编译输入中的 APP 主循环，源码 APP 保持空循环。板上原始 Flash 已备份为 before-test.bin，SWD 记录与原始反馈已保存；测试中将临时接收窗口从 50 ms 恢复为驱动原有 5 ms 后完成动作验收。
-## 验证：EIDE 全量编译、工程外协议测试及 UART 电机低速实测通过。CAN 未做电机实测；USB 环形队列此前通过 20 万次混合读写测试，未做板上验收；旧版本 Jetson 回环结果不作为当前固件验收。其他外设仅核对配置。
+## 当前任务：板载按键/RGB 灯/蜂鸣器业务逻辑完成，待实机验收。
+## 板载业务：BSP/Board/board.c/h。board_init 启动 TIM5/TIM4 PWM，上电红灯+短鸣；board_update 主循环非阻塞：短按切灯色（红→蓝→绿→紫→黄→橙→灭）并 2 kHz 短鸣，长按 800 ms 关灯并 500 Hz 低鸣。board_key_read 20 ms 消抖保留；board_beep/board_buzzer_stop 非阻塞定时蜂鸣。RGB 为 PH12(R)/PH11(G)/PH10(B) TIM5 PWM 共阳极低电平点亮，蜂鸣器 PD14 TIM4_CH3，均为 CubeMX 已有配置。
+## APP：user_main 调 qd4310_can1_init 失败进 Error_Handler，随后 board_init，主循环调 board_update。QD4310_ID=0，直接暴露 qd4310 对象；qd4310_can1_init 复用 BSP/CAN 启动 CAN1，并过滤 0x500+ID 的标准数据帧（DLC 8）更新电机状态。
+## 配置：CubeMX 固定外设、引脚、DMA 和 CAN 位时序未改；EIDE 增加 BSP/Board 头文件路径。
+## 实测（上轮）：2026-10-31，CAN1、1 Mbps、ID 0；接线 H-H/L-L/共地恢复后反馈正常，CAN ESR/ErrorCode 和电机错误码均为 0，10/20 rpm 首个稳定段末 10 次均速 9.952/20.072 rpm。结束确认转速 0、使能位 0。
+## 验证：EIDE 全量编译通过（保留原 BMI088 未使用变量警告）；本轮板载按键/灯/蜂鸣器逻辑仅编译验证，未做实机验收（按键、灯色、蜂鸣时长、极性均需上板确认）。
+## 限制：CAN 总线目前只有一个接收回调槽；后续接其他 CAN 设备时统一分发。USB 环形队列、其他外设未测试。
