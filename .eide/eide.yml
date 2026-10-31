@@ -40,6 +40,7 @@ targets:
         - BSP/UART
         - BSP/CAN
         - BSP/Board
+        - BSP/PWM
         - BSP/qd4310/can
         - APP/qd4310
         - Algorithm/PID

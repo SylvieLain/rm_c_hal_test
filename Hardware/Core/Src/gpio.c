@@ -64,12 +64,6 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SPI2_CS_Pin|CS1_GYRO_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : BUTTON_TRIG_Pin */
-  GPIO_InitStruct.Pin = BUTTON_TRIG_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(BUTTON_TRIG_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pin : RSTN_IST8310_Pin */
   GPIO_InitStruct.Pin = RSTN_IST8310_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
